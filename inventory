@@ -1,0 +1,16 @@
+[master]
+master ansible_host=192.168.122.150
+
+[workers]
+worker1 ansible_host=192.168.122.151
+worker2 ansible_host=192.168.122.152
+worker3 ansible_host=192.168.122.153
+worker4 ansible_host=192.168.122.154
+worker5 ansible_host=192.168.122.155
+
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+ansible_ssh_private_key_file=/home/fgusinde/.ssh/id_ecdsa
+ansible_user=ubuntu
