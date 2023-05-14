@@ -43,6 +43,7 @@
         - bind9-host
         - nmap
         - traceroute
+        - prometheus-node-exporter
 
     - name: remove some packages
       ansible.builtin.apt:
