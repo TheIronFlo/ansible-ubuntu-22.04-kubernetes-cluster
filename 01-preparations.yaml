@@ -40,6 +40,8 @@
         - ntpdate
         - ntp
         - iotop
+        - bind9-host
+        - nmap
 
     - name: remove some packages
       ansible.builtin.apt:
