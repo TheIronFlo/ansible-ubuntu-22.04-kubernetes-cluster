@@ -42,6 +42,7 @@
         - iotop
         - bind9-host
         - nmap
+        - traceroute
 
     - name: remove some packages
       ansible.builtin.apt:
