@@ -57,3 +57,44 @@
       args:
         chdir: $HOME
         creates: pod_network_setup.log
+
+    - name: Add Grafana apt signing key, uses whichever key is at the URL
+      ansible.builtin.apt_key:
+        url: https://apt.grafana.com/gpg.key
+        state: present
+
+    - name: Add Grafana apt repo file
+      copy:
+        dest: /etc/apt/sources.list.d/grafana.list
+        owner: root
+        group: root
+        mode: '0600'
+        content: |
+          deb https://apt.grafana.com stable main
+
+    - name: Install some packages
+      apt:
+        update_cache: true
+        pkg:
+        - nginx
+        - prometheus
+        - grafana
+        - nginx
+        - gnupg2
+        - git
+
+    - name: Copy nginx vhost config for Grafana and Longhorn
+      ansible.builtin.copy:
+        src: ./files/etc/nginx/sites-enabled/default
+        dest: /etc/nginx/sites-enabled/default
+        owner: root
+        group: root
+        mode: '0644'
+      notify:
+      - restart nginx        
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

@@ -9,29 +9,13 @@
         line: "{{ item['ip'] }}\t\t{{ item['names'] | join(' ') }}"
         state: present
       with_items:
-      - ip: 192.168.122.150
+      - ip: 10.96.0.10
         names:
-        - k8s-master
-        - k8s-control-plane
-        - k8s-node-0
-      - ip: 192.168.122.151
-        names:
-        - k8s-worker-1
-      - ip: 192.168.122.152
-        names:
-        - k8s-worker-2
-      - ip: 192.168.122.153
-        names:
-        - k8s-worker-3
-      - ip: 192.168.122.154
-        names:
-        - k8s-worker-4
-      - ip: 192.168.122.155
-        names:
-        - k8s-worker-5
+        - kube-dns.kube-system.svc.cluster.local
 
     - name: Install basic packages
       apt:
+        update_cache: true
         pkg:
         - vim
         - screen
@@ -44,6 +28,11 @@
         - nmap
         - traceroute
         - prometheus-node-exporter
+        - apt-transport-https
+        - software-properties-common
+        - wget
+        - curl
+        - iputils-ping
 
     - name: remove some packages
       ansible.builtin.apt:
@@ -55,10 +44,6 @@
     - fail:
        msg: "OS should be Ubuntu 22.04, not {{ ansible_distribution }} {{ ansible_distribution_version }}"
       when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '22.04'
-
-    - name: update APT packages
-      apt:
-        update_cache: yes
 
     - name: reboot and wait for reboot to complete
       reboot:
@@ -132,6 +117,7 @@
 
     - name: install Containerd
       apt:
+        update_cache: true
         name: containerd.io
         state: present
 
